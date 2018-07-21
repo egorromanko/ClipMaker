@@ -1,0 +1,5 @@
+name: clip-maker
+channels:
+  - defaults
+prefix: C:\Users\e.romanko\AppData\Local\Continuum\anaconda2\envs\clip-maker
+
