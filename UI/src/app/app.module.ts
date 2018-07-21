@@ -4,6 +4,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { JsonpModule } from '@angular/http';
+
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routes.service';
 
@@ -13,6 +16,23 @@ import { ErrorModule } from './views/errors/error.module';
 
 // main layout
 import { NavigationModule } from './main-layout/navigation/navigation.module';
+import { ToastModule } from './main-layout/toast/toast.module';
+
+import {
+  LyricsService,
+  SearchApiService,
+  SearchMicService,
+  StateService,
+  ToastService
+} from './services';
+
+const APP_SERVICES = [
+  LyricsService,
+  SearchApiService,
+  SearchMicService,
+  StateService,
+  ToastService
+]
 
 @NgModule({
   declarations: [
@@ -25,6 +45,7 @@ import { NavigationModule } from './main-layout/navigation/navigation.module';
     BrowserModule,
     BrowserAnimationsModule,
     NavigationModule,
+    ToastModule,
     AppRoutes,
     RouterModule,
     FormsModule,
@@ -32,9 +53,11 @@ import { NavigationModule } from './main-layout/navigation/navigation.module';
     ViewsModule,
     ErrorModule,
     FormsModule, 
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    JsonpModule
   ],
-  providers: [],
+  providers: [...APP_SERVICES],
   bootstrap: [AppComponent],
   schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ]
 })

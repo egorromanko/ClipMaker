@@ -1,5 +1,4 @@
 
-import { ModalsComponent } from './views/modals/modals.component';
 import { EnterLyricsComponent } from './views/enter-lyrics/component/enter-lyrics.component';
 import { RouterModule, Route } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
@@ -11,7 +10,6 @@ const routes: Route[] = [
   { path: '', pathMatch: 'full', redirectTo: 'find-song' },
   { path: 'find-song', component: FindSongComponent },
   { path: 'enter-lyrics', component: EnterLyricsComponent },
-  { path: 'modals', component: ModalsComponent},
   { path: '**', component: NotFoundComponent }
 ];
 

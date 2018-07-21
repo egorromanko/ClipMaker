@@ -2,7 +2,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { FindSongComponent } from './find-song.component';
-import { StatsCardComponent } from '../common/stats-card/stats-card.component';
 
 describe('FindSongComponent', () => {
   let component: FindSongComponent;
@@ -12,7 +11,6 @@ describe('FindSongComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         FindSongComponent,
-        StatsCardComponent
       ],
       schemas: [
         NO_ERRORS_SCHEMA,
