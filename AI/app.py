@@ -3,6 +3,7 @@ import pickle
 import numpy as np
 import json
 from flask import Response
+import json
 
 app = Flask(__name__)
 
@@ -15,17 +16,9 @@ def index():
 def hello():
     return "Hello, World"
 
-@app.route('/predict', methods=['POST'])
+@app.route('/analyze', methods=['POST'])
 def predict():
-    actions = request.get_json()
-    print("Incoming actions: %s" % actions)
-    results = []
-    for action in actions:
-        result = predict_action(action)
-        results.append(result)
-        print("Action: %s" % action)
-        print("Result: %s" % result)
-    return Response(json.dumps(results), mimetype='application/json')
+    return Response(json.dumps({"code": "200"}), mimetype='application/json')
 
 if __name__ == "__main__":
     # Init data here
