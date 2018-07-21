@@ -1,1 +1,1 @@
-export * from './angular-bootstrap-md/index';
+export * from './angular-bootstrap-md';

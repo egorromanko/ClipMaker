@@ -16,57 +16,57 @@ import { IconsModule } from './icons/icon.module';
 
 export {
   ButtonsModule, ButtonRadioDirective, ButtonCheckboxDirective
-} from './buttons/index';
+} from './buttons';
 
 export {
   RippleModule, RippleDirective
-} from './ripple/index';
+} from './ripple';
 
 export {
   WavesModule, WavesDirective
-} from './waves/index';
+} from './waves';
 
 export {
   InputsModule, MdbInputDirective
-} from './inputs/index';
+} from './inputs';
 
 export {
   NavbarModule
-} from './navbars/index';
+} from './navbars';
 
 export {
   BsDropdownConfig, BsDropdownContainerComponent, BsDropdownDirective, BsDropdownMenuDirective,
   DropdownModule, BsDropdownState, BsDropdownToggleDirective
-} from './dropdown/index';
+} from './dropdown';
 
 export {
   CarouselComponent, CarouselConfig, CarouselModule
-} from './carousel/index';
+} from './carousel';
 
 export {
   ChartsModule, BaseChartDirective
-} from './charts/index';
+} from './charts';
 
 export {
   CollapseDirective, CollapseModule
-} from './collapse/index';
+} from './collapse';
 
 export {
   ModalBackdropComponent, ModalBackdropOptions, ModalDirective, ModalModule, ModalOptions, MDBModalService,
   ModalContainerComponent, MDBModalRef
-} from './modals/index';
+} from './modals';
 
 export {
   TooltipConfig, TooltipContainerComponent, TooltipDirective, TooltipModule
-} from './tooltip/index';
+} from './tooltip';
 
 export {
   PopoverConfig, PopoverContainerComponent, PopoverModule, PopoverDirective
-} from './popover/index';
+} from './popover';
 
 export {
   IconsModule, MdbIconComponent
-} from './icons/index';
+} from './icons';
 
 
 
