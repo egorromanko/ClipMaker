@@ -10,6 +10,7 @@ export class EnterLyricsComponent implements OnInit {
   
   public lyrics: string;
   public youtubeLink: string;
+  public creatingClip: boolean = false;
 
   constructor(private lyricsService: LyricsService,
     private toast: ToastService,
@@ -41,10 +42,13 @@ export class EnterLyricsComponent implements OnInit {
       this.toast.warning("Empty lyrics", "Please enter lyrics or find a song");
     }
 
+    this.creatingClip = true;
     this.lyricsService.createClip(this.lyrics, this.youtubeLink).subscribe((res:any) => {
+        this.creatingClip = false; 
         console.log(res);
       },
       err => {
+        this.creatingClip = false; 
         this.toast.error("Error", "Error creating a clip");
       })
   }

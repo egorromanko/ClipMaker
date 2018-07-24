@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -18,6 +19,14 @@ namespace ClipMaker.API.Controllers
     public class ClipMakerController : Controller
     {
         private const string KeywordsUrl = "http://172.18.137.201:5000/summary";
+        private const string DownloadUrl = "http://172.18.137.201:5000/download?url={0}";
+        private const string BeatsUrl = "http://172.18.137.201:5000/beat?url={0}&count={1}";
+        private readonly IHostingEnvironment hostingEnvironment;
+
+        public ClipMakerController(IHostingEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
 
         [HttpPost]
         [Route("Recognize")]
@@ -61,13 +70,78 @@ namespace ClipMaker.API.Controllers
                     var length = result.First.First.Last.First.Count();
                     var random = new Random().Next(1, length);
                     var photo = result.First.First.Last.First[random - 1];
-                    resultingImages.Add(photo.ToString());
-
-
+                    resultingImages.Add(photo["id"].ToString());
                 }
+
+                var musicFileResponse = await httpClient.GetAsync(string.Format(DownloadUrl, clipData.YoutubeLink));
+                var musicPath = Guid.NewGuid().ToString() + ".mp3";
+                using (var contentStream = await musicFileResponse.Content.ReadAsStreamAsync())
+                {
+                    using (var musicStream = new FileStream(musicPath, FileMode.Create, FileAccess.Write, FileShare.None, 3145728, true))
+                    {
+                        await contentStream.CopyToAsync(musicStream);
+                    }
+                }
+
+                var beatResponse = await httpClient.GetAsync(string.Format(BeatsUrl, clipData.YoutubeLink, resultingImages.Count));
+                var beats = JsonConvert.DeserializeObject<double[]>(JsonConvert.DeserializeObject<JObject>(await beatResponse.Content.ReadAsStringAsync())["beats"].ToString());
+                var imagePaths = new List<string>();
+                foreach (var imageId in resultingImages)
+                {
+                    var resp = await httpClient.GetAsync($"https://api.flickr.com/services/rest?method=flickr.photos.getSizes&api_key=0036a2e2148e9efd5410b7072c4dadd2&format=json&photo_id={imageId}");
+                    var respContent = await resp.Content.ReadAsStringAsync();
+                    respContent = respContent.TrimEnd(')').Replace("jsonFlickrApi(", string.Empty);
+
+                    var imageUrl = JsonConvert.DeserializeObject<JObject>(respContent)["sizes"].Last.Last.Last["source"].ToString();
+                    var filePath = Path.Combine(hostingEnvironment.WebRootPath, "images", Guid.NewGuid().ToString() + ".png");
+
+                    using (Stream contentStream = await (await httpClient.GetAsync(imageUrl)).Content.ReadAsStreamAsync(), stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 3145728, true))
+                    {
+                        await contentStream.CopyToAsync(stream);
+                    }
+
+                    imagePaths.Add(filePath);
+                }
+
+                var builder = new StringBuilder();
+                for (int i = 0; i < beats.Count(); i++)
+                {
+                    try
+                    {
+                        builder.Append($" -t {beats[i].ToString().Replace(',', '.')} -i {imagePaths[i]}");
+                    }
+                    catch (Exception ex)
+                    {
+                        // Do nothing
+                    }
+                }
+
+                try
+                {
+                    var videoName = Guid.NewGuid().ToString() + ".mp4";
+                    builder.Append($" -i {musicPath} -codec copy -shortest -c:v libx264 -vf fps=25 -pix_fmt yuv420p -vf scale = 640:480 { videoName}");
+                    var parameters = builder.ToString();
+
+                    var ffmpegPath = Path.Combine(hostingEnvironment.WebRootPath, "videos\\ffmpeg.exe");
+                    var process = Process.Start(new ProcessStartInfo(ffmpegPath, parameters));
+                    process.OutputDataReceived += Process_OutputDataReceived;
+                    process.Start();
+                    process.WaitForExit();
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+                
             }
 
             return Ok(clipData);
+        }
+
+        private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            Debug.WriteLine(e.Data);
         }
     }
 

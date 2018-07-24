@@ -7,6 +7,7 @@
     <form class="md-form justify-content-center" (ngSubmit)="onSubmit()">
       <textarea class="form-control md-textarea md-textarea-auto lyrics-area" placeholder="Enter lyrics yourself"  [(ngModel)]="lyrics" name="lyrics"></textarea>
       <button class="btn btn-success" type="submit">Create Clip!</button>
+      <div class="loader" *ngIf="creatingClip">Loading...</div>
     </form>
   </div>
 </div>

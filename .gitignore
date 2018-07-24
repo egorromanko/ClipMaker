@@ -2,3 +2,9 @@
 \.vscode/settings\.json
 
 AI/app\.pyc
+/API/ClipMaker.API/wwwroot/images
+/API/ClipMaker.API/wwwroot/videos
+/API/ClipMaker.API/c1efcc37-dc04-4b8a-857b-3b323931f4e4.mp3
+/API/ClipMaker.API/audio.mp3
+/API/ClipMaker.API/a6a94c20-cb65-43fc-b86d-044506ae7a6d.mp3
+/API/ClipMaker.API/495d7e2b-5594-4344-b198-ac40f69e6f0a.mp3
